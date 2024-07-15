@@ -95,3 +95,49 @@ insert into tb_funcionarios values (default,'Maria','004.005.006-05');
 alter table tb_funcionarios add column fun_teste int not null;
 select * from tb_funcionarios;
 
+
+
+create database db_hospital_marcella;
+use db_hospital_marcella;
+
+create table tb_medico(
+med_id int primary key not null auto_increment,
+med_crm int not null,
+med_nome varchar (100) not null,
+med_cpf varchar (20) not null,
+med_especialidade varchar (50) not null,
+med_data_nascimento date not null,
+med_endereco varchar (200) not null,
+med_telefone varchar (20)
+);
+
+create table tb_atestado(
+ats_id int primary key not null auto_increment,
+ats_resutados_riscos varchar (100),
+ats_resutado varchar (100) not null,
+ats_observacoes varchar (300),
+ats_med_id int not null,
+foreign key (ats_med_id) references tb_medico(med_id)
+);
+
+create table tb_resutado_exame(
+rex_id int primary key not null auto_increment,
+rex_tipo varchar (30) not null
+);
+
+create table tb_tipo_exame(
+tex_id int primary key not null auto_increment,
+tex_tipo varchar (50) not null
+);
+
+create table tb_exame(
+exa_id int primary key not null auto_increment,
+exa_especialidade varchar (50),
+exa_data_realizacao date not null,
+exa_rex_id int not null,
+exa_tex_id int not null,
+foreign key (exa_rex_id) references tb_resutado_exame(rex_id),
+foreign key (exa_tex_id) references tb_tipo_exame(tex_id)
+);
+
+
