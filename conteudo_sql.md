@@ -115,6 +115,77 @@ exa_tex_id int not null,
 foreign key (exa_rex_id) references tb_resutado_exame(rex_id),
 foreign key (exa_tex_id) references tb_tipo_exame(tex_id)
 );
+
+create table tb_exame_tem_atestado(
+exates_exa_id int not null,
+exates_ats_id int not null,
+foreign key (exates_exa_id) references tb_exame(exa_id),
+foreign key (exates_ats_id) references tb_atestado(ats_id),
+
+primary key (exates_exa_id, exates_ats_id)
+);
+
+create table tb_cargo(
+car_id int primary key not null auto_increment,
+car_nome varchar (45) not null
+);
+
+create table tb_riscos_ocupacionais(
+rio_id int primary key not null auto_increment,
+rio_nome varchar (45) not null
+);
+
+
+create table tb_cargo_tem_risco_operacional(
+carisc_car_id int not null,
+carisc_rio_id int not null,
+foreign key (carisc_car_id) references tb_cargo(car_id),
+foreign key (carisc_rio_id) references tb_riscos_ocupacionais(rio_id),
+primary key (carisc_car_id, carisc_rio_id)
+);
+
+create table tb_empresa(
+emp_id int primary key not null auto_increment,
+emp_cnpj varchar (20) not null,
+emp_nome_fantasia varchar (50),
+emp_endereco varchar (200) not null,
+emp_telefone varchar (20) not null,
+emp_emp_id int not null,
+foreign key (emp_emp_id) references tb_empresa(emp_id)
+);
+
+create table tb_empresa_tem_exame(
+empexa_exa_id int not null,
+empexa_emp_id int not null,
+foreign key (empexa_exa_id) references tb_exame(exa_id),
+foreign key (empexa_emp_id) references tb_empresa(emp_id),
+primary key (empexa_exa_id, empexa_emp_id)
+);
+
+
+
+create table tb_funcionario(
+fun_id int primary key not null auto_increment,
+fun_nome varchar (100) not null,
+fun_cpf varchar (20) not null,
+fun_data_nascimento date not null,
+fun_endereco varchar (200) not null,
+fun_telefone varchar (20) not null,
+
+fun_car_id int not null,
+fun_emp_id int not null,
+foreign key (fun_car_id) references tb_cargo(car_id),
+foreign key (fun_emp_id) references tb_empresa(emp_id)
+
+);
+ 
+create table tb_funcionario_tem_exame(
+fuexa_exa_id int not null,
+fuexa_fun_id int not null,
+foreign key (fuexa_exa_id) references tb_exame(exa_id),
+foreign key (fuexa_fun_id) references tb_funcionario(fun_id),
+primary key (fuexa_exa_id, fuexa_fun_id)
+);
 ```
 
 
