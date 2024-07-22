@@ -187,5 +187,69 @@ foreign key (fuexa_fun_id) references tb_funcionario(fun_id),
 primary key (fuexa_exa_id, fuexa_fun_id)
 );
 ```
+# ALTER
+## Exemplo 4 
 
+```
+create database DB_loja_marcella;
+use DB_loja_marcella;
+
+create table produto(
+codigo int primary key not null auto_increment,
+descri varchar (45) not null,
+valor varchar (45)
+);
+
+alter table produto rename TB_produto;
+alter table tb_produto drop column codigo;
+alter table tb_produto add column pro_cod int primary key not null auto_increment;
+alter table tb_produto change column descri pro_descri varchar (45);
+alter table tb_produto change column valor pro_valor float;
+
+
+create table cliente(
+numero int primary key not null auto_increment,
+Nome int not null,
+cpf int,
+profissao float
+);
+
+alter table cliente rename tb_cliente;
+alter table tb_cliente change column numero cli_cod int;
+alter table tb_cliente change column Nome cli_nome varchar (45);
+alter table tb_cliente change column cpf cli_cpf varchar (45);
+alter table tb_cliente change column profissao cli_profis varchar (45);
+
+
+create table funcionario(
+cod int,
+nome int,
+cpf varchar (45)
+);
+
+alter table funcionario rename tb_funcionario;
+alter table tb_funcionario change column cod fun_cod int primary key not null auto_increment;
+alter table tb_funcionario change column nome fun_nome varchar (45) not null;
+alter table tb_funcionario change column cpf fun_cpf varchar (45);
+
+
+create table pedido(
+idpedido int primary key not null auto_increment,
+cliente varchar (45),
+produto int,
+funcionario varchar (45)
+);
+
+alter table pedido rename tb_pedido;
+alter table tb_pedido change column idpedido ped_cod int;
+alter table tb_pedido change column cliente ped_cli_cod int not null;
+alter table tb_pedido change column produto ped_pro_cod int not null;
+alter table tb_pedido change column funcionario ped_fun_cod int not null ;
+
+alter table tb_pedido add foreign key (ped_cli_cod) references tb_cliente(cli_cod);
+alter table tb_pedido add foreign key (ped_pro_cod) references tb_produto(pro_cod);
+alter table tb_pedido add foreign key (ped_fun_cod) references tb_funcionario(fun_cod);
+
+
+```
 
