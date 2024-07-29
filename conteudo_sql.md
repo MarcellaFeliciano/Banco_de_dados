@@ -190,7 +190,7 @@ primary key (fuexa_exa_id, fuexa_fun_id)
 # ALTER
 ## Exemplo 4 
 
-```
+```sql
 create database DB_loja_marcella;
 use DB_loja_marcella;
 
