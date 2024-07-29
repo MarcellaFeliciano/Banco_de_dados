@@ -253,3 +253,32 @@ alter table tb_pedido add foreign key (ped_fun_cod) references tb_funcionario(fu
 
 ```
 
+## Insert into e Select
+```sql
+use db_ex02_marcella;
+
+select * from tb_autores; 
+# buscar todas as informações da tabela autores - o * representa/expecifica as colunas!
+
+select aut_nome, aut_cod from tb_autores;
+
+# quando eu não defino o nome da coluna eu preciso adicionar o valor de todas as colunas
+insert into tb_autores values (default, 'popó');
+
+# adiciona de forma especifica os valores as colunas que não podem ser nulas (not null) / o autoincremento é definido automa
+insert into tb_autores (aut_nome) values ('Marella');
+
+insert into tb_categorias values (default, 'Harry Potter', 'muito legal'),(default, 'Percy Jackson', 'muito divertido');
+select * from tb_categorias;
+
+UPDATE tb_categorias
+SET cat_nome = 'terror', cat_descricao = 'Muito ruim'
+WHERE cat_cod = 3;
+
+
+# quando a chave é estrangeira eu presiso usar o id do cliente que eu estou atribuindo o telefone
+
+select * from tb_livros;
+insert into tb_livros values (default, 'harry potter', 1, 1);
+
+```
