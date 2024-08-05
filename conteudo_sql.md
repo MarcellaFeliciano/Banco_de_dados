@@ -282,3 +282,30 @@ select * from tb_livros;
 insert into tb_livros values (default, 'harry potter', 1, 1);
 
 ```
+## Selecionar com filtros
+```
+select * from tb_alunos;
+select count(*) from tb_alunos where alu_genero='F';
+select alu_nome, alu_data_nascimento from tb_alunos where alu_bairro='Beverly Hills';
+select * from tb_alunos where alu_bairro='centro' or alu_bairro='Beverly Hills';
+
+select * from tb_alunos where alu_genero='M' and alu_estado='CA';
+
+# A ORDEM IMPORTA  - SELECIONA TODOS DO ESTADO DE 'NY' E SELECIONA TODOS DO BAIRRO 'HOLLYWOOD' SE O GENERO FOR 'M'
+select * from tb_alunos where alu_estado='NY' or alu_bairro='Hollywood' and alu_genero='M';
+select * from tb_alunos where alu_genero='F' and alu_cep='10001';
+
+select * from tb_jogadores where jog_nacionalidade='Brasil';
+select * from tb_jogadores where jog_nacionalidade='Brasil' and jog_posicao='Atacante';
+select count(*) from tb_jogadores where jog_nacionalidade='Brasil' and jog_posicao='Atacante' or jog_posicao='Goleiro';
+
+select * from tb_times;
+
+insert into tb_times values(default, 'Botafogo', 'Rio de Janeiro', 'RJ', 'Brasil');
+insert into tb_jogadores values('Tiquinho Soares', '1996-08-30', 'M', 'Brasil', 'Atacante', 9, 9, '2023-08-01');
+
+# assim eu tenho as duas tabelas para filtrar!
+select * from tb_jogadores, tb_times where tim_id=jog_time_id;
+
+select * from tb_jogadores, tb_times where tim_id=jog_time_id and tim_nome='Palmeiras';
+```
