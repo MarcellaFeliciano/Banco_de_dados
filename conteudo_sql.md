@@ -283,7 +283,7 @@ insert into tb_livros values (default, 'harry potter', 1, 1);
 
 ```
 ## Selecionar com filtros
-```
+```sql
 select * from tb_alunos;
 select count(*) from tb_alunos where alu_genero='F';
 select alu_nome, alu_data_nascimento from tb_alunos where alu_bairro='Beverly Hills';
