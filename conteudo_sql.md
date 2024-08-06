@@ -309,3 +309,49 @@ select * from tb_jogadores, tb_times where tim_id=jog_time_id;
 
 select * from tb_jogadores, tb_times where tim_id=jog_time_id and tim_nome='Palmeiras';
 ```
+
+## Select com filtros 2
+```sql
+-- Selecione todos os resultados de atletas do Brasil:
+select * from atletismo_resultados where pais='Brasil';
+
+-- Encontre os resultados dos eventos ocorridos após 10 de agosto de 2016.
+select * from atletismo_resultados where ano > '2016';
+
+-- Busque os resultados onde o atleta tem o gênero 'F' e a prova é '100m'.
+select * from atletismo_resultados where modalidade='Feminino' and prova='100 metros rasos';
+
+-- Encontre os resultados onde o atleta tem o gênero 'M' ou a prova é 'Maratona'.  (ou inclusivo - todos os homens e todos os homens e mulheres que fazem maratona)
+select * from atletismo_resultados where modalidade='Masculino' or prova='Maratona';
+
+-- Liste os resultados onde a posição é menor que 4 e a prova é 'Maratona' ou '5000m'.
+select * from atletismo_resultados where posicao < 4 and prova='Maratona' or prova='200 metros rasos';
+
+-- Encontre os resultados dos eventos ocorridos em 2020 e onde o país do atleta é 'USA' ou 'KEN'.
+select * from atletismo_resultados where ano='2020' and pais='Estados Unidos' or pais='Quênia';
+
+-- Encontre os resultados onde o tempo é menor que 10 segundos e a prova é '100m'.
+select * from atletismo_resultados where tempo < 10.00 and prova='100 metros rasos';
+
+-- Selecione os resultados de provas realizadas entre 5 de agosto de 2016 e 21 de agosto de 2016, e onde a posição é menor que 5.
+-- select * from atletismo_resultados where data > '5 de agosto' and data < '21 de agosto' and ano='2016' and posicao < 5;
+
+-- Liste os resultados de atletas do país 'JPN' que competiram em 2020 e cuja posição é menor que 8.
+select * from atletismo_resultados where pais='Japão' and ano='2020' and posicao < 8;
+
+-- Busque todos os resultados onde o atleta tem o gênero 'F' ou a prova é '200m', e a posição é menor que 4.
+select * from atletismo_resultados where modalidade='Feminino' or prova='200 metros rasos' and posicao < 4;
+
+-- Encontre os resultados onde o país do atleta é diferente de 'USA' ou 'JAM', e a posição é entre 1 e 3.
+select * from atletismo_resultados where pais <> 'Estados Unidos' and pais <> 'Jamaica' and posicao >= 1 and posicao <= 3;
+
+-- Selecione todos os resultados onde o atleta é 'Mo Farah' ou 'Usain Bolt', que competiram em eventos diferentes de '5000m' e '200m'.
+select * from atletismo_resultados where (atleta_nome='Usain Bolt' or atleta_nome='Mo Farah') and prova <> '500 metros rasos' and prova <> '200 metros rasos';
+
+-- Encontre os resultados dos eventos ocorridos em 2020 e onde o país do atleta é 'Jamaica' ou 'Canadá'.
+select * from atletismo_resultados where ano='2020' and pais='Jamaica' or pais='Canadá';
+
+-- Encontre os resultados onde o tempo é menor que 10 segundos e a prova é '100 metros rasos '  .
+select * from atletismo_resultados where tempo < 10.00 and prova='100 metros rasos';
+
+```
