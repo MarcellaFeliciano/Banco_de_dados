@@ -282,6 +282,16 @@ select * from tb_livros;
 insert into tb_livros values (default, 'harry potter', 1, 1);
 
 ```
+## Select no MYSQL
+```
+select * from tb_nome;
+```
+### Operadores Matemáticos:
+> = / >= / > / < / <= / != ou <>
+
+### Operadores Lógicos
+> AND / OR
+
 ## Selecionar com filtros
 ```sql
 select * from tb_alunos;
