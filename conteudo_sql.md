@@ -252,6 +252,15 @@ alter table tb_pedido add foreign key (ped_fun_cod) references tb_funcionario(fu
 
 
 ```
+## Select no MYSQL
+```sql
+select * from tb_nome;
+```
+### Operadores Matemáticos:
+> = / >= / > / < / <= / != ou <>
+
+### Operadores Lógicos
+> AND / OR
 
 ## Insert into e Select
 ```sql
@@ -282,15 +291,6 @@ select * from tb_livros;
 insert into tb_livros values (default, 'harry potter', 1, 1);
 
 ```
-## Select no MYSQL
-```
-select * from tb_nome;
-```
-### Operadores Matemáticos:
-> = / >= / > / < / <= / != ou <>
-
-### Operadores Lógicos
-> AND / OR
 
 ## Selecionar com filtros
 ```sql
