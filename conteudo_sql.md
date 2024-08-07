@@ -365,3 +365,27 @@ select * from atletismo_resultados where ano='2020' and pais='Jamaica' or pais='
 select * from atletismo_resultados where tempo < 10.00 and prova='100 metros rasos';
 
 ```
+
+### ORDER BY e Operadores IN e IN NOT
+
+```sql
+
+-- Por padrão irá se ordenado pelo id
+-- O 'order by' irá ordenar os dados pela condição/coluna que eu definir (sempre vem ao final) / para colocar em ordem decrescente = desc 
+select * from atletismo_resultados order by atleta_nome;
+
+-- Posso selecionar usando o where e ao final difinir o ordenamento 
+select * from atletismo_resultados where (prova='100 metros rasos' and modalidade='Feminino') and (pais='Estados Unidos' or pais='Jamaica') order by atleta_nome desc;
+
+-- Operadoror IN e NOT IN
+select * from atletismo_resultados where posicao in (1,2,3) order by posicao;
+select * from atletismo_resultados where (prova='Maratona' and posicao in (1,2,3)) order by posicao;
+select * from atletismo_resultados where pais not in ('Estados Unidos', 'Quênia', 'Etiópia', 'Jamaica') order by posicao;
+select * from atletismo_resultados where (pais not in ('Estados Unidos', 'Quênia', 'Etiópia', 'Jamaica') and ano='2020') order by posicao;
+
+-- ordenar o podio (1,2,3) de todas as competições na modalidade feminino e masculino no ano de 2016 e 2020
+select posicao, modalidade, prova, atleta_nome, pais, ano from atletismo_resultados where posicao in (1,2,3) order by prova;
+```
+
+
+
