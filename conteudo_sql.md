@@ -387,5 +387,64 @@ select * from atletismo_resultados where (pais not in ('Estados Unidos', 'Quêni
 select posicao, modalidade, prova, atleta_nome, pais, ano from atletismo_resultados where posicao in (1,2,3) order by prova;
 ```
 
+## Atividade Banco de Dados n - like e limit
+```sql
 
+-- Eu seleciono onde o nome do aluno que tem a letra A! Ordenando pela ordem alfabética e limitando em 5 valores!
+select * from tb_alunos where alu_nome like '%a%' order by alu_nome limit 5;
+
+
+-- A T I V I D A D E --
+
+-- Liste todos os alunos do estado da Califórnia (CA).
+select * from tb_alunos where alu_estado = 'CA';
+
+-- Liste todos os alunos que moram em Los Angeles e são do gênero masculino.
+select * from tb_alunos where alu_cidade='Los Angeles' and alu_genero='M';
+
+-- Liste e todos os alunos cujo número da residência seja maior que 500.
+select * from tb_alunos where alu_numero > 500 order by alu_numero;
+
+-- Liste todos os alunos que moram em Nova York, Los Angeles ou Houston.
+select * from tb_alunos where alu_cidade in ('New York', 'Los Angeles', 'Houston');
+
+-- Liste todos os alunos que não moram em Nova York, Los Angeles ou Houston.
+select * from tb_alunos where alu_cidade not in ('New York', 'Los Angeles', 'Houston');
+
+-- Encontre todos os alunos cujos nomes começam com a letra 'J'.
+select * from tb_alunos where alu_nome like 'J%';
+
+-- Liste todos os alunos ordenados por data de matrícula em ordem decrescente.
+select * from tb_alunos order by alu_data_matricula desc;
+
+-- Liste todos os alunos do gênero feminino cujo número de residência seja menor que 500.
+select * from tb_alunos where alu_genero='F' and alu_numero < 500;
+
+-- Liste todos os alunos que moram em cidades que começam com "L" ou "B" e que estão nos estados de Califórnia ou Nova York.
+select * from tb_alunos where (alu_cidade like 'L%' or alu_cidade like 'B%') and (alu_estado='CA' or alu_estado='NY');
+
+-- Liste todos os alunos que não moram em Los Angeles ou Nova York, ordenados por nome em ordem alfabética.
+select * from tb_alunos where alu_cidade not in ('Los Angeles','New York') order by alu_nome;
+
+-- Encontre todos os alunos do gênero masculino cujo email contém "example.com".
+select * from tb_alunos where alu_genero='M' and alu_email like '%example.com';
+
+-- Liste todos os alunos que moram em Los Angeles, Nova York ou Houston e cujo número de residência seja maior que 100.
+select * from tb_alunos where alu_cidade in ('Los Angeles', 'New York', 'Houston') and alu_numero > 100;
+
+-- Liste todos os alunos que se matricularam em 2023, ordenados pela data de nascimento.
+select * from tb_alunos where alu_data_matricula like '2023%' order by alu_data_nascimento;
+
+-- Liste todos os alunos do gênero feminino que não moram em Califórnia, Nova York ou Texas. 
+select * from tb_alunos where alu_genero='F' and alu_estado not in ('CA', 'NY', 'TX');
+
+-- Liste todos os alunos do gênero masculino cujo nome começa com "L", o número da residência seja maior que 100, e moram na Califórnia.
+select * from tb_alunos where (alu_genero='M' and alu_nome like 'L%') and (alu_numero > 100 and alu_estado='CA');
+
+-- Liste todos os alunos que moram em cidades que começam com "S" ou "H", estão nos estados da Califórnia ou Nova York, e ordene os resultados pelo nome em ordem decrescente.
+select * from tb_alunos where (alu_cidade like 'S%' or alu_cidade like 'H%') and (alu_estado='CA' or alu_estado='NY') order by alu_nome desc;
+
+-- Liste todos os alunos do gênero feminino que moram em Nova York ou Los Angeles e cujo número de residência seja menor que 500.
+select * from tb_alunos where (alu_genero='F' and alu_cidade in ('New York','Los Angeles')) and alu_numero < 500;
+```
 
