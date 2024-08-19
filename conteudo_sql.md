@@ -447,4 +447,40 @@ select * from tb_alunos where (alu_cidade like 'S%' or alu_cidade like 'H%') and
 -- Liste todos os alunos do gênero feminino que moram em Nova York ou Los Angeles e cujo número de residência seja menor que 500.
 select * from tb_alunos where (alu_genero='F' and alu_cidade in ('New York','Los Angeles')) and alu_numero < 500;
 ```
+```
+use db_escola_marcella;
+
+update tb_jogadores set jog_nome = 'Hugo' where jog_id=1;
+
+select * from tb_jogadores;
+
+delete from tb_jogadores where jog_id=1;
+insert into tb_jogadores values (1, 'Hugo', '1994-02-01', 'M', 'Brazil', 'Atacante', '1', '10', '2023-08-01');
+
+select * from tb_professores;
+
+-- 1. **Atualização de E-mail:**  Altere o e-mail do professor "Anitta" para "anitta.silva@exemplo.com".
+update tb_professores set pro_email='anitta.silva@exemplo.com' where pro_id=1;
+
+-- 2. **Mudança de Departamento:**  Atualize o departamento dos professores que lecionam "Música" para "Moda".
+update tb_professores set pro_departamento='Moda' where pro_departamento='Música';
+
+-- 3. **Correção de Telefone:**  Corrija o número de telefone do professor cujo ID é 3 para "(11) 99999-8888".
+update tb_professores set pro_telefone='(11) 99999-8888' where pro_id=3;
+
+-- 4. **Ajuste de Salário:**  Reduza em 5% o salário dos professores que trabalham no departamento de "Moda".
+update tb_professores set pro_salario=(pro_salario-(pro_salario*0.5)) where pro_departamento='Moda';
+
+-- 5. **Atualização de Endereço:**  Atualize o endereço dos professores que moram na cidade "São Paulo" para "Rua Nova, 123".
+update tb_professores set pro_rua='Rua Nova, 123' where pro_cidade='São Paulo';
+
+-- 6. **Exclusão por Departamento:**  Delete todos os professores do departamento "Educação Física".
+delete from tb_professores where pro_departamento='Educação Física';
+
+-- 7. **Remoção de Professores Recém-Contratados:**  Remova todos os professores contratados após o ano de 2024.
+delete from tb_professores where pro_data_contratacao > '2024';
+
+-- 12. **Alteração de Data de Contratação:**  Corrija a data de contratação de "Marília Mendonça" para 2022-01-15.
+update tb_professores set data_contratacao='2022-01-15' where pro_id=9;
+```
 
