@@ -484,3 +484,27 @@ delete from tb_professores where pro_data_contratacao > '2024';
 update tb_professores set data_contratacao='2022-01-15' where pro_id=9;
 ```
 
+-- 1. Atualize o status para 'indisponível' e aumente o preço em 15% para produtos da categoria 'Cereais' ou 'bebidas' que têm `pro_quantidade_estoque` menor que 100 e `pro_preco` menor que 15.00.
+update tb_produtos set pro_status='indisponível' where (pro_categoria='Cereais' or pro_categoria='Bebidas') and (pro_quantidade_estoque < 100) and (pro_preco < 15.00) ;
+update tb_produtos set pro_preco = pro_preco + (pro_preco*0.15) where (pro_categoria='Cereais' or pro_categoria='Bebidas') and (pro_quantidade_estoque < 100) and (pro_preco < 15.00);
+
+-- 2. Exclua todos os produtos com data de validade vencida e cujo preço é maior que 50.00 da tabela `tb_produtos`.
+delete from tb_produtos where pro_data_validade < curdate() and pro_preco > 50.00;
+
+-- 3. Aumente a quantidade em estoque em 50 unidades e defina a marca como 'Novo Produto' para produtos da categoria 'Produtos de Limpeza' que foram cadastrados há mais de 6 meses e cujo `pro_preco` é menor que 10.00
+update tb_produtos set pro_quantidade_estoque = pro_quantidade_estoque+50, pro_marca = 'Novo Produto' where (pro_categoria='Produtos de Limpeza') and (pro_data_cadastro < curdate() - interval 6 month) and (pro_preco < 10.00);
+update tb_produtos set pro_marca = 'Novo Produto' where (pro_categoria='Produtos de Limpeza') and (pro_data_cadastro < curdate() - interval 6 month) and (pro_preco < 10.00);
+
+-- 4. Reduza o valor em 15 % de todos os produtos da categoria 'Chocolates' que têm `pro_quantidade_estoque` menor que 100 e foram cadastrados há mais de três meses e quinze dias.
+update tb_produtos set pro_preco = pro_preco-(pro_preco*0.15) where (pro_categoria='Chocolates') and (pro_quantidade_estoque < 100) and (pro_data_cadastro < curdate() - interval 3 month - interval 15 day); 
+select * from tb_produtos where (pro_categoria='Chocolates') and (pro_quantidade_estoque < 100) and (pro_data_cadastro < curdate() - interval 3 month - interval 15 day); 
+
+
+-- 5. Aumente o preço em 20% e defina a data de validade como 3 meses a partir da data atual para produtos da categoria 'Alimentos' que têm `pro_quantidade_estoque` maior que 50 e `pro_data_validade` menor que a data atual.
+update tb_produtos set pro_preco = pro_preco+(pro_preco*0.2), pro_data_validade = curdate() + interval 3 month where pro_categoria = 'Alimentos' and pro_quantidade_estoque > 50 and pro_data_validade < curdate();
+
+-- 6. Exclua todos os produtos da categoria 'Produtos de Limpeza' que têm validade vencida, peso menor que 1kg e seja da marca Omo ou Ariel.
+delete from tb_produtos where pro_categoria = 'Produtos de Limpeza' and pro_data_validade < curdate() and pro_peso < 1.00 and pro_marca in ('Omo', 'Ariel');
+select * from tb_produtos where pro_categoria = 'Produtos de Limpeza' and pro_data_validade < curdate() and pro_peso < 1.00 and pro_marca in ('Omo', 'Ariel');
+
+
