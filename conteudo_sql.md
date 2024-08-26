@@ -387,7 +387,7 @@ select * from atletismo_resultados where (pais not in ('Estados Unidos', 'Quêni
 select posicao, modalidade, prova, atleta_nome, pais, ano from atletismo_resultados where posicao in (1,2,3) order by prova;
 ```
 
-## Atividade Banco de Dados n - like e limit
+## Atividade Banco de Dados - like e limit
 ```sql
 
 -- Eu seleciono onde o nome do aluno que tem a letra A! Ordenando pela ordem alfabética e limitando em 5 valores!
@@ -447,7 +447,10 @@ select * from tb_alunos where (alu_cidade like 'S%' or alu_cidade like 'H%') and
 -- Liste todos os alunos do gênero feminino que moram em Nova York ou Los Angeles e cujo número de residência seja menor que 500.
 select * from tb_alunos where (alu_genero='F' and alu_cidade in ('New York','Los Angeles')) and alu_numero < 500;
 ```
-```
+## Update e Delete
+
+### Exemplo 1
+```sql
 use db_escola_marcella;
 
 update tb_jogadores set jog_nome = 'Hugo' where jog_id=1;
@@ -484,6 +487,9 @@ delete from tb_professores where pro_data_contratacao > '2024';
 update tb_professores set data_contratacao='2022-01-15' where pro_id=9;
 ```
 
+### Exemplo 2
+
+```sql
 -- 1. Atualize o status para 'indisponível' e aumente o preço em 15% para produtos da categoria 'Cereais' ou 'bebidas' que têm `pro_quantidade_estoque` menor que 100 e `pro_preco` menor que 15.00.
 update tb_produtos set pro_status='indisponível' where (pro_categoria='Cereais' or pro_categoria='Bebidas') and (pro_quantidade_estoque < 100) and (pro_preco < 15.00) ;
 update tb_produtos set pro_preco = pro_preco + (pro_preco*0.15) where (pro_categoria='Cereais' or pro_categoria='Bebidas') and (pro_quantidade_estoque < 100) and (pro_preco < 15.00);
@@ -506,5 +512,23 @@ update tb_produtos set pro_preco = pro_preco+(pro_preco*0.2), pro_data_validade 
 -- 6. Exclua todos os produtos da categoria 'Produtos de Limpeza' que têm validade vencida, peso menor que 1kg e seja da marca Omo ou Ariel.
 delete from tb_produtos where pro_categoria = 'Produtos de Limpeza' and pro_data_validade < curdate() and pro_peso < 1.00 and pro_marca in ('Omo', 'Ariel');
 select * from tb_produtos where pro_categoria = 'Produtos de Limpeza' and pro_data_validade < curdate() and pro_peso < 1.00 and pro_marca in ('Omo', 'Ariel');
+```
+
+
+## JOIN - Junção de Tabelas
+
+```sql
+use db_escola_marcella;
+select jog_id as Código_Jogador, jog_nome as Nome_Jogador, jog_nacionalidade as Nacionalidade, tim_nome as Nome_Time from tb_jogadores join tb_times on jog_time_id=tim_id;
+
+select jog_id as Código_Jogador, jog_nome as Nome_Jogador, jog_data_nascimento as Data_Nascimento, jog_nacionalidade as Nacionalidade, tim_nome as Nome_Time
+from tb_jogadores join tb_times on jog_time_id=tim_id where year(jog_data_nascimento) > 1990;
+
+
+use db_ex02_marcella;
+select liv_cod as Codigo_livro, liv_titulo as Titulo_livro, liv_cat_cod as Id_categoria, cat_nome as Nome_categoria, cat_cod as Id_categoria
+from tb_livros join tb_categorias on liv_cat_cod=cat_cod where cat_nome = 'terror';
+
+```
 
 
