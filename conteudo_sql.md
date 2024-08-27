@@ -531,4 +531,22 @@ from tb_livros join tb_categorias on liv_cat_cod=cat_cod where cat_nome = 'terro
 
 ```
 
+```sql
+-- ATIVIDADE
 
+-- 1 - Liste o nome de todas as disciplinas do curso Informática para Internet. ( IPI - cur_id = 5 / dis_cur_id = 5 )
+
+select dis_id ,dis_nome as Nome_Disciplina, cur_nome, cur_id from tb_disciplinas join tb_cursos on dis_cur_id = cur_id where cur_id = 5;
+
+-- 2 - Liste o nome de todos os alunos matriculados na disciplina Desenvolvimento de APIs. ( dis_id = 177 / dis_cur_id = 5 
+-- ERRADA = select alu_id, alu_nome, dis_nome, cur_id from tb_alunos join tb_cursos on alu_cur_id = cur_id join tb_disciplinas on dis_cur_id = cur_id where dis_id in (120,177);
+
+select mat_id, alu_id, alu_nome, dis_nome from tb_alunos join tb_matriculas on mat_alu_id = alu_id join tb_disciplinas on mat_dis_id = dis_id where dis_nome = 'Desenvolvimento de APIS';
+;
+
+-- 3 - Liste o nome dos professores das disciplinas do curso Redes de Computadores.
+select pro_id, pro_nome, cur_id, cur_nome from tb_professores join tb_cursos on pro_cur_id = cur_id where cur_nome='Redes de Computadores';
+
+select pro_id, pro_nome, cur_id, cur_nome, dis_nome from tb_professores join tb_disciplinas on dis_pro_id = pro_id join tb_cursos on pro_cur_id = cur_id where cur_nome='Redes de Computadores';
+;
+```
