@@ -450,6 +450,7 @@ select * from tb_alunos where (alu_genero='F' and alu_cidade in ('New York','Los
 ## Update e Delete
 
 ### Exemplo 1
+
 ```sql
 use db_escola_marcella;
 
@@ -530,9 +531,8 @@ select liv_cod as Codigo_livro, liv_titulo as Titulo_livro, liv_cat_cod as Id_ca
 from tb_livros join tb_categorias on liv_cat_cod=cat_cod where cat_nome = 'terror';
 
 ```
-
+### Atividade 1
 ```sql
--- ATIVIDADE
 
 -- 1 - Liste o nome de todas as disciplinas do curso Informática para Internet. ( IPI - cur_id = 5 / dis_cur_id = 5 )
 
@@ -550,7 +550,7 @@ select pro_id, pro_nome, cur_id, cur_nome from tb_professores join tb_cursos on 
 select pro_id, pro_nome, cur_id, cur_nome, dis_nome from tb_professores join tb_disciplinas on dis_pro_id = pro_id join tb_cursos on pro_cur_id = cur_id where cur_nome='Redes de Computadores';
 ;
 ```
-
+### Atividade 2
 ```sql
 -- Liste o nome do aluno, o nome da disciplina e a nota, de todos os alunos matriculados.
 select mat_id, alu_nome, dis_nome, not_valor from tb_matriculas join tb_alunos on mat_alu_id = alu_id join tb_disciplinas on mat_dis_id = dis_id join tb_notas on not_mat_id = mat_id;
@@ -572,4 +572,10 @@ join tb_notas on not_mat_id = mat_id join tb_cursos on alu_cur_id = cur_id where
 (alu_nome like 'E%' or alu_nome like 'C%' or alu_nome like 'D%' or alu_nome like 'G%') and (not_valor > 3 and not_valor <9);
 ```
 
+
+## BETWEEN
+```sql
+WHERE alu_id between 1 and 10;
+WHERE alu_nome between 'a' and 'c'; # mostra os nomes que começam com a, b e c
+```
 
