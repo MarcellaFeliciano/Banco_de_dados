@@ -579,3 +579,24 @@ WHERE alu_id between 1 and 10;
 WHERE alu_nome between 'a' and 'c'; # mostra os nomes que começam com a, b e c
 ```
 
+
+
+## Funções de agregação
+```sql
+select sum(ven_total) from tb_vendas; -- soma todas as colunas ven_total da tabela tb_vendas
+
+select avg(ven_total) from tb_vendas; -- faz a média dos valores que estão na coluna ven_total da tabela tb_vendas
+
+select max(ven_total) from tb_vendas; -- maior valor da coluna ven_total da tabela tb_vendas
+
+select min(ven_total) from tb_vendas; -- menor valor da coluna ven_total da tabela tb_vendas
+
+select max(pro_quantidade) from tb_produtos;
+
+select sum(ven_total) from tb_vendas join tb_clientes on ven_cli_id = cli_id where cli_nome = "Ana Silva";
+
+select sum(ven_total) from tb_vendas join tb_clientes on ven_cli_id = cli_id where cli_nome in ("Ana Silva", "João Santos");
+select cli_nome, ven_total, ven_data from tb_vendas join tb_clientes on ven_cli_id = cli_id where cli_nome in ("Ana Silva", "João Santos");
+
+select sum(vpr_quantProduto) from tb_vendas_produtos join tb_produtos on vpr_pro_id = pro_id where vpr_pro_id = 2;
+```
