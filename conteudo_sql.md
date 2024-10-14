@@ -580,7 +580,6 @@ WHERE alu_nome between 'a' and 'c'; # mostra os nomes que começam com a, b e c
 ```
 
 
-
 ## Funções de agregação
 ```sql
 select sum(ven_total) from tb_vendas; -- soma todas as colunas ven_total da tabela tb_vendas
@@ -599,4 +598,62 @@ select sum(ven_total) from tb_vendas join tb_clientes on ven_cli_id = cli_id whe
 select cli_nome, ven_total, ven_data from tb_vendas join tb_clientes on ven_cli_id = cli_id where cli_nome in ("Ana Silva", "João Santos");
 
 select sum(vpr_quantProduto) from tb_vendas_produtos join tb_produtos on vpr_pro_id = pro_id where vpr_pro_id = 2;
+```
+
+
+
+-- Atividade 
+
+```sql
+-- 1. Qual o valor total de todas as vendas registradas no sistema?
+select sum(ven_total) from tb_vendas;
+
+--  2. Quantos produtos estão disponíveis em estoque?
+
+select sum(pro_quantidade) from tb_produtos where pro_status = 'disponível';
+
+ -- 3. Qual é o preço médio dos produtos cadastrados?
+ select avg(pro_preco) from tb_produtos;
+ 
+--  4. Quantos produtos estão indisponíveis em estoque?
+select count(pro_nome) from tb_produtos where pro_status = 'indisponível';
+
+--  5. Quantas vendas foram realizadas pelos clientes que começam com a letra A?
+select count(cli_nome) from tb_vendas join tb_clientes on ven_cli_id=cli_id where cli_nome like 'A%';
+
+ -- 6. Qual o nome e o preço do produto mais caro da categoria 'Eletrônicos'?
+-- errado! select pro_nome, pro_preco from tb_produtos join tb_categorias on pro_categoria_id = cat_id where pro_preco = max(pro_preco) and cat_nome = 'Eletrônicos';
+ select pro_nome, max(pro_preco) from tb_produtos join tb_categorias on pro_categoria_id = cat_id where cat_nome = 'Eletrônicos';
+ 
+--  7. Qual é o nome e o preço do produto mais barato da categoria 'Brinquedos'?
+select pro_nome, min(pro_preco) from tb_produtos join tb_categorias on pro_categoria_id = cat_id where cat_nome ='Brinquedos';
+
+
+ -- 8. Quantos produtos diferentes foram vendidos em todas as vendas?
+select count(distinct vpr_pro_id) from tb_vendas_produtos;
+ 
+-- 9. Qual é a média de produtos vendidos por venda?
+select avg(vpr_quantProduto) from tb_vendas_produtos;
+
+--  10. Quantos clientes diferentes realizaram compras?
+select count(distinct ven_cli_id) from tb_vendas;
+
+-- 11. Qual é o valor médio das vendas realizadas?
+select avg(ven_total) from tb_vendas;
+
+-- 12. Qual é o total de produtos das categorias 'Móveis, Livros e Informática'?
+select sum(pro_quantidade) from tb_produtos join tb_categorias on pro_categoria_id = cat_id where cat_nome in ('Móveis','Livros','Informática');
+
+-- 13. Quantas vendas foram realizadas entre os dias 6 e 12 de outubro de 2024?
+select count(ven_id) from tb_vendas where ven_data between '2024-10-06' and '2024-10-12';
+
+ -- 14. Quantos produtos foram vendidos entre os dias 9 e 14 de outubro de 2024?
+ select sum(vpr_quantProduto) from tb_vendas_produtos join tb_vendas on vpr_ven_id = ven_id where ven_data between '2024-10-09' and '2024-10-14';
+ 
+--  15. Quais os nomes dos clientes que compraram entre os dias 4 e 10 de outubro de 2024?
+select cli_nome from tb_clientes join tb_vendas on ven_cli_id = cli_id where ven_data between '2024-10-04' and '2024-10-10';
+
+ -- 16. Quantos produtos que começam com a letra 'A' estão disponíveis e quantos estão indisponíveis?
+select count(pro_nome) from tb_produtos where pro_nome like 'A%' and pro_status = 'disponível';
+select count(pro_nome) from tb_produtos where pro_nome like 'A%' and pro_status = 'indisponível';
 ```
