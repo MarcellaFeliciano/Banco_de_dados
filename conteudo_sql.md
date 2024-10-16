@@ -656,4 +656,20 @@ select cli_nome from tb_clientes join tb_vendas on ven_cli_id = cli_id where ven
  -- 16. Quantos produtos que começam com a letra 'A' estão disponíveis e quantos estão indisponíveis?
 select count(pro_nome) from tb_produtos where pro_nome like 'A%' and pro_status = 'disponível';
 select count(pro_nome) from tb_produtos where pro_nome like 'A%' and pro_status = 'indisponível';
+
+
+-- --------------- Group By ----------------------
+-- 17. Exiba o nome da marca e a quantidade total de produtos vendidos por marca.
+select pro_marca, sum(vpr_quantProduto) from tb_produtos join tb_vendas_produtos on vpr_pro_id = pro_id group by pro_marca;
+
+-- 18. Lista o nome da categoria, quantidade de produtos distintos dessa categoria e o valor total de vendas da mesma.
+select cat_nome, count(distinct pro_nome), count(vpr_ven_id) from tb_categorias join tb_produtos on pro_categoria_id = cat_id join tb_vendas_produtos on vpr_pro_id = pro_id group by cat_nome;
+
+-- 19. Mostre o nome do cliente e valor total das compras de cada, ordenado pelo total em ordem decrescente.
+select cli_nome, sum(ven_total) from tb_clientes join tb_vendas on ven_cli_id = cli_id group by ven_cli_id order by sum(ven_total) desc;
+
+-- 20. Liste os produtos, sua quantidade em estoque e a quantidade vendida, ordenando pelos mais vendidos.
+select pro_nome, pro_quantidade, sum(vpr_quantProduto) from tb_produtos join tb_vendas_produtos on vpr_pro_id = pro_id group by pro_id order by sum(vpr_quantProduto) desc;
+
+
 ```
