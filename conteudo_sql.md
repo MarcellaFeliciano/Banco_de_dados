@@ -602,7 +602,7 @@ select sum(vpr_quantProduto) from tb_vendas_produtos join tb_produtos on vpr_pro
 
 
 
--- Atividade 
+#### Atividade - FUNÇÕES DE AGREGAÇÃO
 
 ```sql
 -- 1. Qual o valor total de todas as vendas registradas no sistema?
@@ -658,7 +658,7 @@ select count(pro_nome) from tb_produtos where pro_nome like 'A%' and pro_status 
 select count(pro_nome) from tb_produtos where pro_nome like 'A%' and pro_status = 'indisponível';
 
 
--- --------------- Group By ----------------------
+- --------------- Group By ----------------------
 -- 17. Exiba o nome da marca e a quantidade total de produtos vendidos por marca.
 select pro_marca, sum(vpr_quantProduto) from tb_produtos join tb_vendas_produtos on vpr_pro_id = pro_id group by pro_marca;
 
@@ -673,3 +673,50 @@ select pro_nome, pro_quantidade, sum(vpr_quantProduto) from tb_produtos join tb_
 
 
 ```
+
+```sql
+-- ------------------------------group by com ou sem having--------------------------------
+
+-- Qual é o total gasto por cada cliente em todas as suas compras?
+select cli_nome, sum(ven_total) from tb_vendas join tb_clientes on ven_cli_id = cli_id group by ven_cli_id;
+
+-- Quais produtos foram vendidos em mais de uma venda e quantas vezes cada um foi vendido?
+select vpr_pro_id, count(vpr_ven_id) from tb_vendas_produtos group by vpr_pro_id having count(vpr_ven_id)>1;
+
+-- Qual é a média de quantidade vendida por produto para cada categoria?
+select avg(vpr_quantProduto), cat_nome from tb_vendas_produtos join tb_produtos on vpr_pro_id = pro_id join tb_categorias on pro_categoria_id = cat_id group by cat_id;
+
+-- Quais clientes realizaram mais de uma compra?
+-- Qual é a média de preço dos produtos vendidos em cada categoria?
+-- Quais categorias tiveram um total de vendas superior a um valor específico?
+-- Qual é a data e o valor da compra mais cara de cada cliente?
+-- Quais produtos têm uma quantidade total vendida superior a um valor específico?
+-- Qual foi a média de valor gasto em cada mês?
+-- Quais clientes compraram produtos de categorias diferentes em suas compras?
+
+
+-- ------------------------------Apenas com subconsultas--------------------------------
+
+
+-- Qual é o nome do cliente que realizou a compra mais cara?
+select cli_nome, ven_total from tb_vendas join tb_clientes on ven_cli_id=cli_id where ven_total = (select max(ven_total) from tb_vendas);
+
+-- Quais produtos nunca foram vendidos?
+select * from tb_produtos join tb_vendas_produtos on pro_id=vpr_pro_id where pro_id not in (select vpr_pro_id from tb_vendas_produtos);
+select * from tb_produtos where pro_id not in (select vpr_pro_id from tb_vendas_produtos);
+
+-- Quais clientes nunca realizaram uma compra?
+select * from tb_clientes where cli_id not in (select ven_cli_id from tb_vendas);
+select ven_cli_id from tb_vendas;
+
+-- Qual é o nome e o e-mail do cliente que mais gastou em todas as suas compras?
+-- Quais produtos foram vendidos pelo menor preço em relação ao seu preço original?
+-- Qual é o segundo maior valor total de uma venda?
+-- Quais são os nomes dos clientes que compraram apenas uma vez?
+-- Quais categorias de produtos nunca foram vendidas?
+-- Qual foi o mês com o maior valor total de vendas em todo o histórico?
+-- Quais clientes compraram o produto mais caro vendido na loja?
+```
+
+
+
