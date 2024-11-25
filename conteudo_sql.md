@@ -717,6 +717,35 @@ select ven_cli_id from tb_vendas;
 -- Qual foi o mês com o maior valor total de vendas em todo o histórico?
 -- Quais clientes compraram o produto mais caro vendido na loja?
 ```
+## Funções
+```sql
+create function fn_soma(a int, b int) returns int return a+b;
+
+select fn_soma(10,2);
+
+create function fn_media_p(n1 float, n2 float, n3 float, n4 float) returns float return (((n1*2) + (n2*3) + (n3*4) + (n4*5)) / 14);
+drop function fn_media_p;
+
+create function fn_media(n1 float, n2 float, n3 float, n4 float) returns float return (n1 + n2 + n3 + n4)/ 4;
+drop function fn_media;
+
+select not_alu_id,
+round(fn_media(not_nota1, not_nota2, not_nota3, not_nota4),2)
+from tb_notas;
+
+select not_alu_id,
+round(fn_media_p(not_nota1, not_nota2, not_nota3, not_nota4),2)
+from tb_notas;
+
+create function fn_msg(nome varchar(55)) returns varchar(100) return (Concat("Olá ",nome,", bem vindo!"));
+drop function fn_msg;
+select fn_msg(alu_nome) from tb_alunos;
 
 
+create function fn_msg2(nome varchar(55), n1 float, n2 float, n3 float, n4 float) returns varchar(200) return (Concat("Olá ",nome,", bem vindo! Sua média é:",fn_media(n1,n2,n3,n4),"."));
+
+select fn_msg2(alu_nome,not_nota1, not_nota2, not_nota3, not_nota4) from tb_notas join tb_alunos on not_alu_id = alu_id;
+
+
+```
 
