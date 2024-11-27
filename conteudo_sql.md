@@ -749,3 +749,34 @@ select fn_msg2(alu_nome,not_nota1, not_nota2, not_nota3, not_nota4) from tb_nota
 
 ```
 
+
+### função em bloco
+
+```sql
+delimiter //
+create function fn_situacao(media float) returns varchar(100)
+begin
+if media >=6 then return 'Aprovado';
+elseif media <=3.5 then return 'Reprovado';
+else return 'Prova final';
+end if ;
+end //
+delimiter ;
+
+drop function fn_situacao;
+select fn_situacao(2);
+----------------------------
+
+
+delimiter //
+create function fn_info(id int) returns varchar(200)
+begin
+	set @n_matri = (select count(mat_alu_id) from tb_matriculas where mat_curso_id = id);
+    
+end //
+delimiter ;
+
+drop function fn_info;
+
+select fn_info(1);
+```
