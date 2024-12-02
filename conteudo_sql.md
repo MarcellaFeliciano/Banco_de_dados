@@ -687,6 +687,8 @@ select vpr_pro_id, count(vpr_ven_id) from tb_vendas_produtos group by vpr_pro_id
 select avg(vpr_quantProduto), cat_nome from tb_vendas_produtos join tb_produtos on vpr_pro_id = pro_id join tb_categorias on pro_categoria_id = cat_id group by cat_id;
 
 -- Quais clientes realizaram mais de uma compra?
+select ven_cli_id, count(*) as total from tb_vendas group by  ven_cli_id having total>1;
+
 -- Qual é a média de preço dos produtos vendidos em cada categoria?
 -- Quais categorias tiveram um total de vendas superior a um valor específico?
 -- Qual é a data e o valor da compra mais cara de cada cliente?
@@ -702,20 +704,39 @@ select avg(vpr_quantProduto), cat_nome from tb_vendas_produtos join tb_produtos 
 select cli_nome, ven_total from tb_vendas join tb_clientes on ven_cli_id=cli_id where ven_total = (select max(ven_total) from tb_vendas);
 
 -- Quais produtos nunca foram vendidos?
-select * from tb_produtos join tb_vendas_produtos on pro_id=vpr_pro_id where pro_id not in (select vpr_pro_id from tb_vendas_produtos);
+-- errada - select * from tb_produtos join tb_vendas_produtos on pro_id=vpr_pro_id where pro_id not in (select vpr_pro_id from tb_vendas_produtos);
 select * from tb_produtos where pro_id not in (select vpr_pro_id from tb_vendas_produtos);
 
 -- Quais clientes nunca realizaram uma compra?
 select * from tb_clientes where cli_id not in (select ven_cli_id from tb_vendas);
-select ven_cli_id from tb_vendas;
 
 -- Qual é o nome e o e-mail do cliente que mais gastou em todas as suas compras?
+select cli_nome, cli_email from tb_clientes join tb_vendas on ven_cli_id = cli_id where ven_total = (select max(ven_total) from tb_vendas);
+
 -- Quais produtos foram vendidos pelo menor preço em relação ao seu preço original?
+select pro_nome, vpr_precoProduto, pro_preco from tb_produtos join tb_vendas_produtos on vpr_pro_id = pro_id where vpr_precoProduto < pro_preco;
+
 -- Qual é o segundo maior valor total de uma venda?
+select ven_total from tb_vendas where ven_total < (select max(ven_total) from tb_vendas) order by ven_total desc limit 1;
+
 -- Quais são os nomes dos clientes que compraram apenas uma vez?
 -- Quais categorias de produtos nunca foram vendidas?
 -- Qual foi o mês com o maior valor total de vendas em todo o histórico?
 -- Quais clientes compraram o produto mais caro vendido na loja?
+
+select * from tb_clientes where cli_id = (select ven_cli_id from tb_vendas where ven_id = 
+(select vpr_ven_id from tb_vendas_produtos where vpr_pro_id = 
+(select pro_id from tb_produtos where pro_preco = 
+(select max(pro_preco) from tb_produtos))));
+
+select ven_cli_id from tb_vendas where ven_id = (select vpr_ven_id from tb_vendas_produtos where vpr_pro_id =(select pro_id from tb_produtos where pro_preco = (select max(pro_preco) from tb_produtos)));
+select vpr_ven_id from tb_vendas_produtos where bpr_PRO_ID = (select pro_id from tb_produtos where pro_preco = (select max(pro_preco) from tb_produtos));
+
+select cli_nome, pro_id from tb_clientes join tb_vendas on ven_cli_id = cli_id join tb_vendas_produtos on vpr_ven_id = ven_id join tb_produtos on pro_id = vpr_pro_id where pro_preco = (select max(pro_preco) from tb_produtos);
+
+select pro_id from tb_produtos where pro_preco = (select max(pro_preco) from tb_produtos); -- descubro o id do produto mais caro
+
+select max(pro_preco) from tb_produtos;
 ```
 ## Funções
 ```sql
