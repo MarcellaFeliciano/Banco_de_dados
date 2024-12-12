@@ -1,0 +1,72 @@
+
+<VirtualHost *:80>
+ServerAdmin admin@example.com
+ServerName example.com
+ServerAlias www.example.com
+DocumentRoot /home/user/teste
+ErrorLog ${APACHE_LOG_DIR}/error.log
+CustomLog ${APACHE_LOG_DIR}/access.log combined
+Alias /static /home/user/teste/static
+<Directory /home/user/teste/static>
+Require all granted
+</Directory>
+Alias /media /home/user/teste/media
+<Directory /home/user/teste/media>
+Require all granted
+</Directory>
+<Directory /home/user/teste/>
+<Files app.wsgi>
+Require all granted
+</Files>
+</Directory>
+WSGIDaemonProcess teste python-path=/home/user/teste python-
+home=/home/user/teste/env
+WSGIProcessGroup teste
+WSGIScriptAlias / /home/user/teste/app.wsgi
+</VirtualHost>
+
+
+
+-----------------------------------------------------------------------
+
+
+
+
+
+sudo chmod 664 /var/www/html/projeto_flask/database/database.db
+sudo chown :www-data /var/www/html/projeto_flask/database/database.db
+sudo chown :www-data /var/www/html/projeto_flask/
+
+
+
+-----------------------------------------------------------------
+
+
+<VirtualHost *:443>
+ServerAdmin admin@example.com
+ServerName example.com
+ServerAlias www.example.com
+DocumentRoot /var/www/html/projeto_flask
+SSLEngine on
+SSLCertificateFile /etc/apache2/ssl/projeto_flask/projeto.crt
+SSLCertificateKeyFile /etc/apache2/ssl/projeto_flask/projeto.key
+ErrorLog ${APACHE_LOG_DIR}/error.log
+CustomLog ${APACHE_LOG_DIR}/access.log combined
+Alias /static /home/user/teste/static
+<Directory /home/user/teste/static>
+Require all granted
+</Directory>
+Alias /media /home/user/teste/media
+<Directory /home/user/teste/media>
+Require all granted
+</Directory>
+<Directory /home/user/teste/>
+<Files app.wsgi>
+Require all granted
+</Files>
+</Directory>
+WSGIDaemonProcess projeto_flask python-path=/var/www/html/projeto_flask
+python-home=/var/www/html/projeto_flask/env
+WSGIProcessGroup projeto_flask
+WSGIScriptAlias / /var/www/html/projeto_flask/app.wsgi
+</VirtualHost>
