@@ -801,3 +801,32 @@ drop function fn_info;
 
 select fn_info(1);
 ```
+
+```sql
+-- função que receba o nome do livro e retorne o total de livros vendidos
+
+delimiter //
+create function fn_total_vend(livro varchar(50)) returns int
+begin
+	declare id int;
+	declare total int;
+    set id = (select liv_id from tb_livros where liv_titulo = livro);
+    set total = (select sum(pli_quantidade) from tb_pedidos_livros where pli_liv_id = id);
+    return total;
+end //
+delimiter ;
+
+
+
+-- funçõa para verificar se o livro está disponivel na biblioteca
+delimiter //
+create function fn_verificar(id_livro int) returns varchar(20)
+begin
+	declare estoque int; -- declarar varivel
+    set estoque = (select liv_estoque from tb_livros where liv_id = id_livro); -- estoque recebe o retorno do select
+    if estoque > 0 then return 'Disponivel';
+    else return "Indisponível";
+	end if;
+end //
+delimiter ;
+```
