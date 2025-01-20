@@ -830,3 +830,47 @@ begin
 end //
 delimiter ;
 ```
+```
+
+-- 1 - Calcular valor total (em reais) de pedidos de um cliente em um período;
+select sum(ped_total) from tb_pedidos where ped_cli_id = 1 and ped_data between '2000-01-15' and '2008-08-10';
+select cli_id from tb_clientes where cli_nome = "Ana Souza";
+
+delimiter //
+create function fn_total_ped(nome varchar(50), data1 varchar(50), data2 varchar(50)) returns float 
+begin
+	declare id int;
+    declare total int;
+    set id = (select cli_id from tb_clientes where cli_nome = nome);
+    set total = (select sum(ped_total) from tb_pedidos where ped_cli_id = id and ped_data between data1 and data2);
+    return total;
+end //
+delimiter ;
+select fn_total_ped('Ana Souza','2000-01-15','2008-08-10');
+
+
+-- 2 - Atualizar o estoque de um livro após um pedido;
+delimiter //
+create function fn_atualizar_estoque(id int) returns int
+begin
+	declare liv_id int;
+    declare liv_estoque int;
+    declare pli_quantidade int;
+    declare novo_estoque int;
+    declare liv_novo_estoque int;
+    set livro_id = (select pli_liv_id from tb_pedidos_livros where pli_id = id);
+    set pli_quantidade = (select pli_quantidade from tb_pedidos_livros where pli_id = id);
+    set liv_estoque = (select liv_estoque from tb_livros where liv_id = livro_id);
+    set novo_estoque = liv_estoque - pli_quantidade;
+    update tb_livros set liv_estoque = novo_estoque where liv_id = livro_id;
+    return novo_estoque;
+end //
+delimiter ;
+
+-- 3 - Atualizar o valor total dos pedidos com base nos itens desses;
+-- 4 - Listar o nome dos livros que estão com estoque zerado; GROUP_CONCAT(coluna SEPARATOR ',')
+-- 5 - Atualizar o preço de um livro específico;
+-- 6 - Obter a média de livros, por pedido, para todos os clientes em um determinado período.
+
+
+```
