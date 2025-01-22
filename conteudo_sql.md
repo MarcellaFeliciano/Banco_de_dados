@@ -830,8 +830,7 @@ begin
 end //
 delimiter ;
 ```
-```
-
+```sql
 -- 1 - Calcular valor total (em reais) de pedidos de um cliente em um período;
 select sum(ped_total) from tb_pedidos where ped_cli_id = 1 and ped_data between '2000-01-15' and '2008-08-10';
 select cli_id from tb_clientes where cli_nome = "Ana Souza";
@@ -850,27 +849,66 @@ select fn_total_ped('Ana Souza','2000-01-15','2008-08-10');
 
 
 -- 2 - Atualizar o estoque de um livro após um pedido;
+drop function fn_atualizar_estoque;
 delimiter //
-create function fn_atualizar_estoque(id int) returns int
+create function fn_atualizar_estoque(id int) returns varchar(10)
 begin
-	declare liv_id int;
-    declare liv_estoque int;
+	declare livro_id int;
     declare pli_quantidade int;
     declare novo_estoque int;
     declare liv_novo_estoque int;
     set livro_id = (select pli_liv_id from tb_pedidos_livros where pli_id = id);
     set pli_quantidade = (select pli_quantidade from tb_pedidos_livros where pli_id = id);
-    set liv_estoque = (select liv_estoque from tb_livros where liv_id = livro_id);
-    set novo_estoque = liv_estoque - pli_quantidade;
-    update tb_livros set liv_estoque = novo_estoque where liv_id = livro_id;
-    return novo_estoque;
+    
+    update tb_livros set liv_estoque = 10 - pli_quantidade where liv_id = livro_id;
+    return 'sim';
 end //
 delimiter ;
+
+select fn_atualizar_estoque(3);
+
+select pli_liv_id from tb_pedidos_livros where pli_id = 3;
+select pli_quantidade from tb_pedidos_livros where pli_id = 3;
+select liv_estoque from tb_livros where liv_id = 3;
+
+declare liv_estoque int;
+set liv_estoque = (select liv_estoque from tb_livros where liv_id = livro_id);
+set novo_estoque = liv_estoque - pli_quantidade;
+-- função principal
+delimiter //
+create function fn_atualiza_principal(id_pedido int) returns varchar(100)
+begin
+	declare var text;
+    set var = (select group_concat(fn_atualizada(pli_liv_id, pli_quantidade)) from tb_pedidos_livros where pli_ped_id = id_pedido);
+    return "os livros foram atualizados";
+end //
+delimiter ;
+
+-- função secundaria(retorna se foi atualizado)  passa  o id do pededo e ele retira a quant do estoqur
+delimiter //
+create function fn_atualiza(id_livro int, qnt_livros int) returns varchar(30)
+begin
+	update tb_livros set liv_estoque = liv_estoque - qnt_livros where liv_id = id_livro;
+    return 'estoque atualizado';
+end //
+delimiter ;
+
+-- atualizar a quant de livos ( o id e quant comprada)
+delimiter //
+create function fn_atualizar_quant(id_livro int, qnt_comprada int) returns varchar(30)
+begin
+	declare estoque int;
+    set estoque = (select liv_estoque from tb_livros where liv_id = id_livro);
+    update tb_livros set liv_estoque = estoque - qnt_comprada where liv_id = id_livro;
+    return 'estoque atualizado';
+end //
+delimiter ;
+
+select fn_atualizar_quant(2,1);
+
 
 -- 3 - Atualizar o valor total dos pedidos com base nos itens desses;
 -- 4 - Listar o nome dos livros que estão com estoque zerado; GROUP_CONCAT(coluna SEPARATOR ',')
 -- 5 - Atualizar o preço de um livro específico;
 -- 6 - Obter a média de livros, por pedido, para todos os clientes em um determinado período.
-
-
 ```
