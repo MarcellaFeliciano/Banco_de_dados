@@ -32,6 +32,13 @@ def editar_alunos():
             </form>
 ```
 
+            <!--
+            <form action="{{ url_for('editar_alunos') }}" method="get">
+                <input type="hidden" name="aluno_id" value="{{ alu.alu_id }}">
+                <input type="submit" value="Editar">
+            </form>
+            -->
+
 ### editar aluno html
 ```html
 <!DOCTYPE html>
