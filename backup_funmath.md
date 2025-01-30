@@ -1,10 +1,20 @@
+```python
+
+
+fases_trilha = [
+                {
+                    "pergunta": "url(../imgs/trilha_jogo.jpg);",
+                    "resposta": "1"
+                },
+                {
+                    "pergunta": "url(../imgs/trilha_jogo.jpg);",
+                    "resposta": "2"
+                },]
 
 @app.route('/trilha')
 def Trilha():
     return render_template ('inicial_trilha.html')
 
-
-```python
 @app.route('/fases_trilha')
 def Fases_trilha():
     return render_template('fases_trilha.html')
