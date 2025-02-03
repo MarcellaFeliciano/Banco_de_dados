@@ -912,3 +912,28 @@ select fn_atualizar_quant(2,1);
 -- 5 - Atualizar o preço de um livro específico;
 -- 6 - Obter a média de livros, por pedido, para todos os clientes em um determinado período.
 ```
+
+```sql
+
+delimiter //
+create procedure resumo_db_instituicao()
+begin
+	select curso_nome, dis_nome, alu_nome,
+    round(fn_mediaPonderada(not_nota1, not_nota2, not_nota3, not_nota4),2),
+    fn_situacao(fn_mediaPonderada(not_nota1, not_nota2, not_nota3, not_nota4))
+    from tb_cursos join tb_disciplinas on curso_id = dis_curso_id join tb_notas on not_dis_id=dis_id join tb_alunos on not_alu_id=alu_id;
+end //
+delimiter ;
+
+call resumo_db_instituicao;
+create function fn_mediaPonderada(n1 float, n2 float, n3 float, n4 float) returns float return (n1*2 + n2*3 + n3*4 + n4*5)/ 14;
+
+delimiter //
+create function fn_situacao(media float) returns varchar(100)
+begin
+if media >=6 then return 'Aprovado';
+elseif media <=3.5 then return 'Reprovado';
+else return 'Prova final';
+end if ;
+end //
+delimiter ;
