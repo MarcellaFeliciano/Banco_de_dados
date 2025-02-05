@@ -937,3 +937,17 @@ else return 'Prova final';
 end if ;
 end //
 delimiter ;
+```
+```sql
+delimiter //
+create procedure lancar_notas(id_aluno int, nota1 float,nota2 float, nota3 float, nota4 float, out situacao_aluno varchar(100))
+begin
+    update tb_notas set not_nota1 = nota1, not_nota2 = nota2, not_nota3 = nota3, not_nota4 = nota4 where not_alu_id = id_aluno;
+    set situacao_aluno = fn_situacao(fn_mediaPonderada(nota1, nota2, nota3, nota4));
+end //
+delimiter ;
+
+call lancar_notas(1,5,6,7,8, @var);
+select @var;
+
+```
