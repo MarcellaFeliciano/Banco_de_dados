@@ -951,3 +951,29 @@ call lancar_notas(1,5,6,7,8, @var);
 select @var;
 
 ```
+
+
+### Trigger (gatilhos)
+```sql
+
+use db_instituicao_2v_marcella;
+
+select * from tb_matriculas;
+select * from tb_disciplinas;
+select * from tb_cursos;
+select * from tb_notas;
+
+alter table tb_matriculas add column mat_situacao varchar(200);
+
+delimiter //
+create trigger tr_AddAluno after insert on tb_matriculas for each row
+begin
+	declare id_disciplina int;
+	set id_disciplina = (select dis_id from tb_disciplinas where dis_curso_id = new.mat_curso_id limit 1);
+	insert into tb_notas (not_alu_id, not_dis_id) values (new.mat_alu_id, id_disciplina);
+end //
+delimiter ;
+
+-- o insert em matriculas altera a tabela notas, pois o aluno se matricula em uma disciplina e o gatinho leva essas informações para 
+insert into tb_matriculas(mat_alu_id, mat_curso_id) values (2,2);
+```
