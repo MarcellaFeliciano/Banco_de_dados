@@ -977,18 +977,18 @@ delimiter ;
 -- o insert em matriculas altera a tabela notas, pois o aluno se matricula em uma disciplina e o gatinho leva essas informações para 
 insert into tb_matriculas(mat_alu_id, mat_curso_id) values (2,2);
 ```
+```SQL
 -- 2 Sempre que uma nova nota for inserida ou atualizada (update), disparar um gatilho para atualizar a situação do aluno naquela matrícula.
 
 delimiter //
 create trigger tr_AddNota after insert on tb_notas for each row
 begin
 	declare situacao varchar(100);
-    declare curso int;
-    set situacao = (select fn_situacao(fn_media(new.not_nota1, new.not_nota2, new.not_nota3, new.not_nota4)));
+	declare curso int;
+	set situacao = (select fn_situacao(fn_media(new.not_nota1, new.not_nota2, new.not_nota3, new.not_nota4)));
 
-	set aluno = (select alu_id from tb_alunos where not_nota1 = new.not_nota2 limit 1);
-    set curso = (select dis_curso_id from tb_disciplinas where dis_id = new.not_dis_id);
-	update tb_matriculas 
-    set mat_situacao = situacao where mat_alu_id = new.not_alu_id and mat_curso_id = curso;
+    	set curso = (select dis_curso_id from tb_disciplinas where dis_id = new.not_dis_id);
+	update tb_matriculas set mat_situacao = situacao where mat_alu_id = new.not_alu_id and mat_curso_id = curso;
 end //
 delimiter ;
+```
