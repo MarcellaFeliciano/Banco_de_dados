@@ -994,3 +994,84 @@ begin
 end //
 delimiter ;
 ```
+
+
+
+use db_instituicao_2v_marcella;
+
+select * from tb_matriculas;
+select * from tb_disciplinas;
+select * from tb_cursos;
+select * from tb_notas;
+
+alter table tb_matriculas add column mat_situacao varchar(200);
+-- 1 Sempre que um aluno for matriculado em um curso, add ele à tabela de notas com as disciplinas do curso;
+
+delimiter //
+create trigger tr_AddAluno after insert on tb_matriculas for each row
+begin
+	declare id_disciplina int;
+	set id_disciplina = (select dis_id from tb_disciplinas where dis_curso_id = new.mat_curso_id limit 1);
+	insert into tb_notas (not_alu_id, not_dis_id) values (new.mat_alu_id, id_disciplina);
+end //
+delimiter ;
+-- o insert em matriculas altera a tabela notas, pois o aluno se matricula em uma disciplina e o gatinho leva essas informações para 
+insert into tb_matriculas(mat_alu_id, mat_curso_id) values (2,2);
+
+-- 2 Sempre que uma nova nota for inserida ou atualizada (update), disparar um gatilho para atualizar a situação do aluno naquela matrícula.
+drop trigger tr_AddNota;
+delimiter //
+create trigger tr_AddNota_teste after insert on tb_notas for each row
+begin
+	declare situacao varchar(100);
+    declare curso int;
+    
+    if new.not_nota1 = NULL or new.not_nota2=NULL or new.not_nota3=NULL or new.not_nota4=NULL then 
+    update tb_matriculas set mat_situacao = 'erro' where mat_alu_id = new.not_alu_id and mat_curso_id = curso;
+	else
+		set situacao = (select fn_situacao(fn_media(new.not_nota1, new.not_nota2, new.not_nota3, new.not_nota4)));
+		set situacao = (select fn_situacao(fn_media(new.not_nota1, new.not_nota2, new.not_nota3, new.not_nota4)));
+        set curso = (select dis_curso_id from tb_disciplinas where dis_id = new.not_dis_id);
+		update tb_matriculas set mat_situacao = situacao where mat_alu_id = new.not_alu_id and mat_curso_id = curso;
+	end if ;
+end //
+delimiter ;
+DELIMITER //
+
+CREATE TRIGGER tr_AddNota_teste 
+AFTER INSERT ON tb_notas 
+FOR EACH ROW
+BEGIN
+    DECLARE situacao VARCHAR(100);
+    DECLARE curso INT;
+
+    -- Atribui o curso antes de usá-lo
+    SET curso = (SELECT dis_curso_id FROM tb_disciplinas WHERE dis_id = NEW.not_dis_id);
+    
+    IF NEW.not_nota1 IS NULL OR NEW.not_nota2 IS NULL OR NEW.not_nota3 IS NULL OR NEW.not_nota4 IS NULL THEN 
+        UPDATE tb_matriculas 
+        SET mat_situacao = 'erro' 
+        WHERE mat_alu_id = NEW.not_alu_id AND mat_curso_id = curso;
+    ELSE
+        SET situacao = (SELECT fn_situacao(fn_media(NEW.not_nota1, NEW.not_nota2, NEW.not_nota3, NEW.not_nota4)));
+        UPDATE tb_matriculas 
+        SET mat_situacao = situacao 
+        WHERE mat_alu_id = NEW.not_alu_id AND mat_curso_id = curso;
+    END IF;
+END //
+DELIMITER ;
+
+delimiter //
+create trigger tr_UpdateNota after update on tb_notas for each row
+begin
+	declare situacao varchar(100);
+    declare curso int;
+    set situacao = (select fn_situacao(fn_media(new.not_nota1, new.not_nota2, new.not_nota3, new.not_nota4)));
+
+    set curso = (select dis_curso_id from tb_disciplinas where dis_id = new.not_dis_id);
+	update tb_matriculas set mat_situacao = situacao where mat_alu_id = new.not_alu_id and mat_curso_id = curso;
+end //
+delimiter ;
+
+update tb_notas set not_nota1=3, not_nota2=1, not_nota3 = 5, not_nota4=6 where not_alu_id=2 and not_dis_id =3;
+
