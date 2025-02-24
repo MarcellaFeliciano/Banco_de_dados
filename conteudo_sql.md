@@ -1075,3 +1075,135 @@ delimiter ;
 
 update tb_notas set not_nota1=3, not_nota2=1, not_nota3 = 5, not_nota4=6 where not_alu_id=2 and not_dis_id =3;
 
+## funções
+-- 1 - Calcular valor total (em reais) de pedidos de um cliente em um período;
+select sum(ped_total) from tb_pedidos where ped_cli_id = 1 and ped_data between '2000-01-15' and '2008-08-10';
+select cli_id from tb_clientes where cli_nome = "Ana Souza";
+
+delimiter //
+create function fn_total_ped(nome varchar(50), data1 varchar(50), data2 varchar(50)) returns float 
+begin
+	declare id int;
+    declare total int;
+    set id = (select cli_id from tb_clientes where cli_nome = nome);
+    set total = (select sum(ped_total) from tb_pedidos where ped_cli_id = id and ped_data between data1 and data2);
+    return total;
+end //
+delimiter ;
+select fn_total_ped('Ana Souza','2000-01-15','2008-08-10');
+
+
+-- 2 - Atualizar o estoque de um livro após um pedido;
+-- função principal
+delimiter //
+create function fn_atualiza_principal(id_pedido int) returns varchar(100)
+begin
+	declare var text;
+    set var = (select group_concat(fn_atualizada(pli_liv_id, pli_quantidade)) from tb_pedidos_livros where pli_ped_id = id_pedido);
+    return "os livros foram atualizados";
+end //
+delimiter ;
+
+-- função secundaria(retorna se foi atualizado)  passa  o id do pededo e ele retira a quant do estoqur
+delimiter //
+create function fn_atualiza(id_livro int, qnt_livros int) returns varchar(30)
+begin
+	update tb_livros set liv_estoque = liv_estoque - qnt_livros where liv_id = id_livro;
+    return 'estoque atualizado';
+end //
+delimiter ;
+
+-- atualizar a quant de livos ( o id e quant comprada)
+delimiter //
+create function fn_atualizar_quant(id_livro int, qnt_comprada int) returns varchar(30)
+begin
+	declare estoque int;
+    set estoque = (select liv_estoque from tb_livros where liv_id = id_livro);
+    update tb_livros set liv_estoque = estoque - qnt_comprada where liv_id = id_livro;
+    return 'estoque atualizado';
+end //
+delimiter ;
+
+-- 3 - Atualizar o valor total dos pedidos com base nos itens desses;
+
+delimiter //
+create function fn_atualizar_total(pli_ped_id int) returns varchar(30)
+begin
+    declare novo_total decimal(10,2);
+
+    -- Calcula o valor total dos itens do pedido
+    select sum(pli_quantidade * pli_preco) into novo_total
+    from tb_pedidos_livros
+    where pli_ped_id = pli_ped_id;
+
+    -- Atualiza o valor total do pedido
+    update tb_pedidos
+    set ped_total = novo_total
+    where ped_id = pli_ped_id;
+
+    return 'Valor total atualizado com sucesso!';
+end //
+delimiter ;
+
+-- 4 - Listar o nome dos livros que estão com estoque zerado; GROUP_CONCAT(coluna SEPARATOR ',')
+
+delimiter //
+create function fn_liv_estoque_zero() returns varchar(255)
+begin
+    declare nomes_livros varchar(255);
+
+    -- Usa GROUP_CONCAT para listar os nomes dos livros com estoque zero
+    select GROUP_CONCAT(liv_titulo SEPARATOR ', ') into nomes_livros
+    from tb_livros
+    where liv_estoque = 0;
+
+    return if(nomes_livros is null, 'Nenhum livro com estoque zero.', nomes_livros);
+end //
+delimiter ;
+
+-- 5 - Atualizar o preço de um livro específico;
+
+delimiter //
+create function fn_atualizar_liv(liv_id int, liv_preco decimal(10,2)) returns varchar(255)
+begin
+    -- Atualiza o preço do livro
+    update tb_livros
+    set liv_preco = liv_preco
+    where liv_id = liv_id;
+
+    -- Verifica se a atualização foi bem-sucedida
+    if row_count() > 0 then
+        return 'Preço do livro atualizado com sucesso!';
+    else
+        return 'Livro não encontrado ou preço não alterado.';
+    end if;
+end //
+delimiter ;
+
+-- 6 - Obter a média de livros, por pedido, para todos os clientes em um determinado período.
+delimiter //
+create function fn_media_liv_pedidos(data_inicio date, data_fim date) returns varchar(255)
+begin
+    declare media decimal(10,2);
+
+    -- Calcula a média de livros por pedido no período especificado
+    select avg(qtd_livros) into media
+    from (
+        select sum(pli_quantidade) as qtd_livros
+        from tb_pedidos_livros
+        where pli_ped_id in (
+            select ped_id
+            from tb_pedidos
+            where ped_data between data_inicio and data_fim
+        )
+        group by pli_ped_id
+    ) as subquery;
+
+    -- Retorna a média formatada
+    if media is null then
+        return 'Nenhum pedido encontrado.';
+    else
+        return concat('Média de livros por pedido: ', media);
+    end if;
+end //
+delimiter ;
