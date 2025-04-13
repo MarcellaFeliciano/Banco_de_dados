@@ -995,8 +995,8 @@ end //
 delimiter ;
 ```
 
-
-
+## Exemplos
+```sql
 use db_instituicao_2v_marcella;
 
 select * from tb_matriculas;
@@ -1207,3 +1207,4 @@ begin
     end if;
 end //
 delimiter ;
+```
